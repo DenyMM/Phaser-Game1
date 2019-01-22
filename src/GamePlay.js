@@ -15,11 +15,26 @@ GamePlayManager = {
     this.sukeban.frame = 0;
     this.sukeban.x = game.width/2;
     this.sukeban.y = game.height/2;
-    this.sukeban.anchor.setTo(0.5, 0.5);
-    this.sukeban.angle = 0;
+    this.sukeban.anchor.setTo(0.5); //dos parametros//
+    //this.sukeban.angle = 0;
+    this.sukeban.scale.setTo(3);
+    //this.sukeban.alpha = 0.5;//opacidad//
   },
   update: function(){
-    this.sukeban.angle +=1;
+    //this.sukeban.angle +=1; //giro//
+    var pointerX = game.input.x;
+    var pointerY = game.input.y;
+
+    var distX = pointerX - this.sukeban.x;
+    var distY = pointerY - this.sukeban.y;
+
+    if(distX>0){
+      this.sukeban.scale.setTo(1,1);
+    }else{
+      this.sukeban.scale.setTo(-1,1);
+    }
+    this.sukeban.x += distX * 0.02;
+    this.sukeban.y += distY * 0.02;
   }
 }
 var game = new Phaser.Game(900, 640, Phaser.CANVAS);
