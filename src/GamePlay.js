@@ -28,16 +28,47 @@ GamePlayManager = {
 
     this.prices = [];
     for(var i=0; i<AMOUNT_PRICES; i++){
-      var prices = game.add.sprite(100,100, 'prices');
-      prices.frame = game.rnd.integerInRange(0,3);
-      prices.scale.setTo(2.30 + game.rnd.frac());
-      prices.anchor.setTo(0.5);
-      prices.x = game.rnd.integerInRange(50, 1050);
-      prices.y = game.rnd.integerInRange(50, 600);
+      var price = game.add.sprite(100,100, 'prices');
+      price.frame = game.rnd.integerInRange(0,3);
+      price.scale.setTo(1.30 + game.rnd.frac());
+      price.anchor.setTo(0.5);
+      price.x = game.rnd.integerInRange(50, 900);
+      price.y = game.rnd.integerInRange(50, 600);
+
+      this.prices[i] = price;
+      var rectCurrentPrice = this.getBoundsPrice(price);
+      var rectSukeban = this.getBoundsPrice(this.sukeban);
+
+      while(this.isOverlappingOtherPrice(i, rectCurrentPrice) || this.isRectanglesOverlapping(rectSukeban, rectCurrentPrice)){
+        price.x = game.rnd.integerInRange(50, 900);
+        price.y = game.rnd.integerInRange(50, 500);
+        var rectCurrentPrice = this.getBoundsPrice(price);
+      }
     }
   },
   onTap:function(){
     this.flagFirstMouseDown = true;
+  },
+  getBoundsPrice:function(currentPrice){
+    return new Phaser.Rectangle(currentPrice.left, currentPrice.top, currentPrice.width, currentPrice.height);
+  },
+  isRectanglesOverlapping: function(rect1, rect2) {
+    if (rect1.x> rect2.x+rect2.width || rect2.x> rect1.x+rect1.width){
+      return false;
+    }
+    if (rect1.y> rect2.y+rect2.height || rect2.y> rect1.y+rect1.height){
+      return false;
+    }
+    return true;
+  },
+  isOverlappingOtherPrice:function(index, rect2){
+    for(var i=0; i<index; i++){
+      var rect1 = this.getBoundsPrice(this.prices[i]);
+      if(this.isRectanglesOverlapping(rect1, rect2)){
+        return true;
+      }
+    }
+    return false;
   },
   update: function(){
     //this.sukeban.angle +=1; //giro//
