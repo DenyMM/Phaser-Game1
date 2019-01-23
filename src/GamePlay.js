@@ -70,6 +70,20 @@ GamePlayManager = {
     }
     return false;
   },
+  getBoundsSukeban: function(){
+    var x0 = this.sukeban.x - Math.abs(this.sukeban.width)/4;
+    var width = Math.abs(this.sukeban.width)/2;
+    var y0 = this.sukeban.y -  this.sukeban.height/2;
+    var height = this.sukeban.height;
+
+    return new Phaser.Rectangle(x0, y0, width, height);
+  },
+  render: function(){ //rectangulos separados//
+    //game.debug.spriteBounds(this.sukeban);
+    for(var i=0; i<AMOUNT_PRICES; i++){
+      //game.debug.spriteBounds(this.prices[i]);
+    }
+  },
   update: function(){
     //this.sukeban.angle +=1; //giro//
     if(this.flagFirstMouseDown){
@@ -86,6 +100,15 @@ GamePlayManager = {
     }
     this.sukeban.x += distX * 0.03;
     this.sukeban.y += distY * 0.03;
+
+    for(var i=0; i<AMOUNT_PRICES; i++){
+      var rectSukeban =  this.getBoundsSukeban();
+      var rectPrices = this.getBoundsPrice(this.prices[i]);
+
+        if (this.prices[i].visible && this.isRectanglesOverlapping(rectSukeban, rectPrices)){
+        this.prices[i].visible = false;
+        }
+    }
   }
  }
 }
