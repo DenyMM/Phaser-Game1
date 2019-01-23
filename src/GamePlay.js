@@ -13,6 +13,7 @@ GamePlayManager = {
     game.load.image('background', 'assets/images/background.png');
     game.load.spritesheet('sukeban', 'assets/images/Sukeban.png', 74.5, 78, 2);
     game.load.spritesheet('prices', 'assets/images/prices.png', 50, 50, 4);
+    game.load.spritesheet('xplode', 'assets/images/xplode.png');
   },
   create: function(){
     game.add.sprite(1, 0, 'background');
@@ -45,6 +46,20 @@ GamePlayManager = {
         var rectCurrentPrice = this.getBoundsPrice(price);
       }
     }
+    this.xplode = game.add.sprite(100,100, 'xplode');
+    this.xplode.tweenScale = game.add.tween(this.xplode.scale).to({
+                       x: [0.4, 0.8, 0.4],
+                       y: [0.4, 0.8, 0.4]
+    }, 600, Phaser.Easing.Exponential.Out, false, 0, 0, false);
+    //var tween = game.add.tween(this.xplode);
+    //tween.to({x:500, y:100}, 1500, Phaser.Easing.Elastic.InOut);
+    //tween.start();
+    this.xplode.tweenAlpha = game.add.tween(this.xplode).to({
+                      alpha: [1, 0.6, 0]
+    }, 600, Phaser.Easing.Exponential.Out, false, 0, 0, false);
+
+    this.xplode.anchor.setTo(0.5);
+    this.xplode.visible = false;
   },
   onTap:function(){
     this.flagFirstMouseDown = true;
@@ -107,6 +122,12 @@ GamePlayManager = {
 
         if (this.prices[i].visible && this.isRectanglesOverlapping(rectSukeban, rectPrices)){
         this.prices[i].visible = false;
+
+        this.xplode.visible = true;
+        this.xplode.x = this.prices[i].x;
+        this.xplode.y = this.prices[i].y;
+        this.xplode.tweenScale.start();
+        this.xplode.tweenAlpha.start();
         }
     }
   }
