@@ -1,5 +1,5 @@
 
-var AMOUNT_PRICES = 10;
+var AMOUNT_PRICES = 20;
 
 GamePlayManager = {
   init: function(){
@@ -11,7 +11,7 @@ GamePlayManager = {
   },
   preload: function(){
     game.load.image('background', 'assets/images/background.png');
-    game.load.spritesheet('sukeban', 'assets/images/Sukeban.png', 74.5, 78, 2);
+    game.load.spritesheet('sukeban', 'assets/images/ssukeban.png', 135.5, 179, 2);
     game.load.spritesheet('prices', 'assets/images/prices.png', 50, 50, 4);
     game.load.spritesheet('xplode', 'assets/images/xplode.png');
   },
@@ -23,7 +23,7 @@ GamePlayManager = {
     this.sukeban.y = game.height/2;
     this.sukeban.anchor.setTo(0.5); //dos parametros//
     //this.sukeban.angle = 0;
-    this.sukeban.scale.setTo(3);
+    this.sukeban.scale.setTo(1);
     //this.sukeban.alpha = 0.5;//opacidad//
     game.input.onDown.add(this.onTap, this);
 
@@ -109,9 +109,9 @@ GamePlayManager = {
     var distY = pointerY - this.sukeban.y;
 
     if(distX>0){
-      this.sukeban.scale.setTo(3,3,);
+      this.sukeban.scale.setTo(1,1,);
     }else{
-      this.sukeban.scale.setTo(-3,3);
+      this.sukeban.scale.setTo(-1,1);
     }
     this.sukeban.x += distX * 0.03;
     this.sukeban.y += distY * 0.03;
