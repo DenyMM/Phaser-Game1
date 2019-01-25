@@ -46,11 +46,15 @@ GamePlayManager = {
         var rectCurrentPrice = this.getBoundsPrice(price);
       }
     }
-    this.xplode = game.add.sprite(100,100, 'xplode');
+
+    this.xplodeGroup = game.add.group();
+
+    for(var i=0; i<10; i++){
+    this.xplode = this.xplodeGroup.create(100,100, 'xplode');
     this.xplode.tweenScale = game.add.tween(this.xplode.scale).to({
                        x: [0.4, 0.8, 0.4],
                        y: [0.4, 0.8, 0.4]
-    }, 600, Phaser.Easing.Exponential.Out, false, 0, 0, false);
+}, 600, Phaser.Easing.Exponential.Out, false, 0, 0, false);
     //var tween = game.add.tween(this.xplode);
     //tween.to({x:500, y:100}, 1500, Phaser.Easing.Elastic.InOut);
     //tween.start();
@@ -59,7 +63,8 @@ GamePlayManager = {
     }, 600, Phaser.Easing.Exponential.Out, false, 0, 0, false);
 
     this.xplode.anchor.setTo(0.5);
-    this.xplode.visible = false;
+    this.xplode.kill();
+  }
   },
   onTap:function(){
     this.flagFirstMouseDown = true;
@@ -123,12 +128,17 @@ GamePlayManager = {
         if (this.prices[i].visible && this.isRectanglesOverlapping(rectSukeban, rectPrices)){
         this.prices[i].visible = false;
 
-        this.xplode.visible = true;
-        this.xplode.x = this.prices[i].x;
-        this.xplode.y = this.prices[i].y;
-        this.xplode.tweenScale.start();
-        this.xplode.tweenAlpha.start();
-        }
+        var xplode = this.xplodeGroup.getFirstDead();
+        if(xplode!=null){
+        xplode.reset(this.prices[i].x, this.prices[i].y);
+        xplode.tweenScale.start();
+        xplode.tweenAlpha.start();
+
+        xplode.tweenAlpha.onComplete.add(function (currentTarget, currentTween){
+          currentTarget.kill();
+        }, this);
+       }
+      }
     }
   }
  }
