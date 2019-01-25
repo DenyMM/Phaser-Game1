@@ -1,5 +1,5 @@
 
-var AMOUNT_PRICES = 20;
+var AMOUNT_PRICES = 25;
 
 GamePlayManager = {
   init: function(){
@@ -10,7 +10,7 @@ GamePlayManager = {
     this.flagFirstMouseDown = false;
   },
   preload: function(){
-    game.load.image('background', 'assets/images/background.png');
+    game.load.image('background', 'assets/images/Backgroundd.jpg');
     game.load.spritesheet('sukeban', 'assets/images/ssukeban.png', 135.5, 179, 2);
     game.load.spritesheet('prices', 'assets/images/prices.png', 50, 50, 4);
     game.load.spritesheet('xplode', 'assets/images/xplode.png');
@@ -23,7 +23,7 @@ GamePlayManager = {
     this.sukeban.y = game.height/2;
     this.sukeban.anchor.setTo(0.5); //dos parametros//
     //this.sukeban.angle = 0;
-    this.sukeban.scale.setTo(1);
+    this.sukeban.scale.setTo(2);
     //this.sukeban.alpha = 0.5;//opacidad//
     game.input.onDown.add(this.onTap, this);
 
@@ -31,10 +31,10 @@ GamePlayManager = {
     for(var i=0; i<AMOUNT_PRICES; i++){
       var price = game.add.sprite(100,100, 'prices');
       price.frame = game.rnd.integerInRange(0,3);
-      price.scale.setTo(1.30 + game.rnd.frac());
+      price.scale.setTo(2.30 + game.rnd.frac());
       price.anchor.setTo(0.5);
-      price.x = game.rnd.integerInRange(50, 900);
-      price.y = game.rnd.integerInRange(50, 600);
+      price.x = game.rnd.integerInRange(50, 1800);
+      price.y = game.rnd.integerInRange(50, 400);
 
       this.prices[i] = price;
       var rectCurrentPrice = this.getBoundsPrice(price);
@@ -42,7 +42,7 @@ GamePlayManager = {
 
       while(this.isOverlappingOtherPrice(i, rectCurrentPrice) || this.isRectanglesOverlapping(rectSukeban, rectCurrentPrice)){
         price.x = game.rnd.integerInRange(50, 900);
-        price.y = game.rnd.integerInRange(50, 500);
+        price.y = game.rnd.integerInRange(50, 900);
         var rectCurrentPrice = this.getBoundsPrice(price);
       }
     }
@@ -73,6 +73,7 @@ GamePlayManager = {
     align: 'center'
   }
   this.scoreText = game.add.text(game.width/2, 40, '0', style);
+  this.scoreText.anchor.setTo(0.5);
   },
   increaseScore: function(){
     this.currentScore+=100;
@@ -126,9 +127,9 @@ GamePlayManager = {
     var distY = pointerY - this.sukeban.y;
 
     if(distX>0){
-      this.sukeban.scale.setTo(1,1,);
+      this.sukeban.scale.setTo(2,2,);
     }else{
-      this.sukeban.scale.setTo(-1,1);
+      this.sukeban.scale.setTo(-2,2);
     }
     this.sukeban.x += distX * 0.03;
     this.sukeban.y += distY * 0.03;
@@ -156,7 +157,7 @@ GamePlayManager = {
   }
  }
 }
-var game = new Phaser.Game(900, 550, Phaser.CANVAS);
+var game = new Phaser.Game(1805, 904, Phaser.CANVAS);
 
 game.state.add('gameplay', GamePlayManager);
 game.state.start('gameplay');
