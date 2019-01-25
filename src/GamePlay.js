@@ -65,6 +65,18 @@ GamePlayManager = {
     this.xplode.anchor.setTo(0.5);
     this.xplode.kill();
   }
+
+  this.currentScore = 0;
+  var style = {
+    font: 'bold 30pt Arial',
+    fill: '#FFFFFF',
+    align: 'center'
+  }
+  this.scoreText = game.add.text(game.width/2, 40, '0', style);
+  },
+  increaseScore: function(){
+    this.currentScore+=100;
+    this.scoreText.text = this.currentScore;
   },
   onTap:function(){
     this.flagFirstMouseDown = true;
@@ -126,6 +138,7 @@ GamePlayManager = {
       var rectPrices = this.getBoundsPrice(this.prices[i]);
 
         if (this.prices[i].visible && this.isRectanglesOverlapping(rectSukeban, rectPrices)){
+        this.increaseScore();
         this.prices[i].visible = false;
 
         var xplode = this.xplodeGroup.getFirstDead();
