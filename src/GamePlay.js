@@ -9,6 +9,7 @@ GamePlayManager = {
 
     this.flagFirstMouseDown = false;
     this.amountPricesCaught = 0;
+    this.endGame = false;
   },
   preload: function(){
     game.load.image('background', 'assets/images/Backgroundd.jpg');
@@ -75,6 +76,22 @@ GamePlayManager = {
   }
   this.scoreText = game.add.text(game.width/2, 40, '0', style);
   this.scoreText.anchor.setTo(0.5);
+
+  this.totalTime = 15;
+  this.timerText = game.add.text(1500, 40, this.totalTime + '', style);
+  this.timerText.anchor.setTo(0.5);
+
+  this.timerGameOver = game.time.events.loop(Phaser.Timer.SECOND, function(){
+       if(this.flagFirstMouseDown){
+          this.totalTime--;
+          this.timerText.text = this.totalTime+'';
+          if(this.totalTime<=0){
+            game.time.events.remove(this.timerGameOver);
+            this.endGame = true;
+            this.showFinalMessage('GAME OVER :C');
+          }
+       }
+  },this);
   },
   increaseScore: function(){
     this.currentScore+=100;
@@ -82,6 +99,8 @@ GamePlayManager = {
 
     this.amountPricesCaught += 1;
     if(this.amountPricesCaught >= AMOUNT_PRICES){
+       game.time.events.remove(this.timerGameOver);
+       this.endGame = true;
        this.showFinalMessage('Congratulations!!');
     }
     },
@@ -142,7 +161,7 @@ GamePlayManager = {
   },
   update: function(){
     //this.sukeban.angle +=1; //giro//
-    if(this.flagFirstMouseDown){
+    if(this.flagFirstMouseDown && !this.endGame){
     var pointerX = game.input.x;
     var pointerY = game.input.y;
 
