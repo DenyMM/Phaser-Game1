@@ -8,6 +8,7 @@ GamePlayManager = {
     game.scale.pageAlignVertically = true;
 
     this.flagFirstMouseDown = false;
+    this.amountPricesCaught = 0;
   },
   preload: function(){
     game.load.image('background', 'assets/images/Backgroundd.jpg');
@@ -78,7 +79,29 @@ GamePlayManager = {
   increaseScore: function(){
     this.currentScore+=100;
     this.scoreText.text = this.currentScore;
-  },
+
+    this.amountPricesCaught += 1;
+    if(this.amountPricesCaught >= AMOUNT_PRICES){
+       this.showFinalMessage('Congratulations!!');
+    }
+    },
+    showFinalMessage: function(msg){
+      var bgAlpha = game.add.bitmapData(game.width, game.height);
+      bgAlpha.ctx.fillStyle = '#000000'
+      bgAlpha.ctx.fillRect(0,0, game.width, game.height);
+
+      var bg = game.add.sprite(0,0, bgAlpha);
+      bg.alpha = 0.5;
+
+      var style = {
+        font: 'bold 60pt Arial',
+        fill: '#FFFFFF',
+        align: 'center'
+      }
+
+      this.textFieldFinalMsg = game.add.text(game.width/2, game.height/2, msg, style);
+      this.textFieldFinalMsg.anchor.setTo(0.5);
+    },
   onTap:function(){
     this.flagFirstMouseDown = true;
   },
