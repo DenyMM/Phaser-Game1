@@ -10,15 +10,23 @@ GamePlayManager = {
     this.flagFirstMouseDown = false;
     this.amountPricesCaught = 0;
     this.endGame = false;
+
+    this.countSmile = -1;
   },
   preload: function(){
     game.load.image('background', 'assets/images/Backgroundd.jpg');
-    game.load.spritesheet('sukeban', 'assets/images/ssukeban.png', 135.5, 179, 2);
+    game.load.spritesheet('sukeban', 'assets/images/ssukeban.png', 135, 178, 2);
     game.load.spritesheet('prices', 'assets/images/prices.png', 50, 50, 4);
     game.load.spritesheet('xplode', 'assets/images/xplode.png');
+
+    game.load.image('gakuran', 'assets/images/gakuran2.png');
   },
   create: function(){
-    game.add.sprite(1, 0, 'background');
+    this.background = game.add.sprite(1, 0, 'background');
+    this.background.alpha = 0.7;
+      this.gakuran = game.add.sprite(950, 620, 'gakuran');
+      this.gakuran.scale.setTo(1.30);
+      this.gakuran.alpha = 0.9;
     this.sukeban = game.add.sprite(0, 0, 'sukeban');
     this.sukeban.frame = 0;
     this.sukeban.x = game.width/2;
@@ -92,8 +100,12 @@ GamePlayManager = {
           }
        }
   },this);
+
   },
   increaseScore: function(){
+    this.countSmile = 0;
+    this.sukeban.frame = 1;
+
     this.currentScore+=100;
     this.scoreText.text = this.currentScore;
 
@@ -105,6 +117,8 @@ GamePlayManager = {
     }
     },
     showFinalMessage: function(msg){
+      this.tweenGakuran.stop();
+
       var bgAlpha = game.add.bitmapData(game.width, game.height);
       bgAlpha.ctx.fillStyle = '#000000'
       bgAlpha.ctx.fillRect(0,0, game.width, game.height);
@@ -122,6 +136,10 @@ GamePlayManager = {
       this.textFieldFinalMsg.anchor.setTo(0.5);
     },
   onTap:function(){
+    if(!this.flagFirstMouseDown){
+      this.tweenGakuran = game.add.tween(this.gakuran.position).to( {x: -0.001},
+      8800, Phaser.Easing.Cubic.InOut, true, 0, 1000, true).loop(true);
+    }
     this.flagFirstMouseDown = true;
   },
   getBoundsPrice:function(currentPrice){
@@ -162,6 +180,19 @@ GamePlayManager = {
   update: function(){
     //this.sukeban.angle +=1; //giro//
     if(this.flagFirstMouseDown && !this.endGame){
+
+      //this.gakuran.x--;
+      //if(this.gakuran.x<-300){
+        //this.gakuran.x = 1300;
+      //}
+     if(this.countSmile>=0){
+       this.countSmile++;
+       if(this.countSmile>50){
+         this.countSmile = -1;
+         this.sukeban.frame = 0;
+       }
+     }
+
     var pointerX = game.input.x;
     var pointerY = game.input.y;
 
